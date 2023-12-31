@@ -28,6 +28,19 @@ def text_from_pdf_file_path(pdf_file_path):
         for page in doc:
             report_text += page.get_text()
     return report_text
+def upload_file():
+    uploaded_file = st.file_uploader("Choose a file", type=['txt', 'pdf', 'docx'])
+    if uploaded_file is not None:
+        if uploaded_file.type == 'application/pdf':
+            report = text_from_pdf_file(uploaded_file)
+        elif uploaded_file.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            report = read_docx(uploaded_file)
+        elif uploaded_file.type == 'text/plain':
+            # Decode the byte content to string
+            report = str(uploaded_file.read(), 'utf-8')
+        return report
+    else:
+        return None
 # Convert json object to a pandas DataFrame
 def json_to_table(json_obj_):
     def flatten_json(y, prefix=''):
@@ -49,3 +62,23 @@ def json_to_table(json_obj_):
     df = pd.DataFrame([flat_report])
     df = df.T
     return df
+
+def clarify_findings(findings):
+    """
+    Findings: dictionary with keys representing pathologies and values representing the presence/absence of them
+    Values interpretation: 0 -> Absent; 1 -> Present
+
+    Returns: a dataframe representing the findings in a more human-readable format
+
+    """
+    clarified_findings = dict()
+    for finding, value in findings.items():
+        if value == '0':
+            clarified_findings[finding] = "Absent"
+        elif value == '1':
+            clarified_findings[finding] = "Present"
+        else:
+            clarified_findings[finding] = "Unknown"
+    table = pd.DataFrame.from_dict(clarified_findings, orient='index', columns=["Presence/Absence of Findings"])
+    table.index = ["Cardiac Congestion", "Lung Opacities", "Pleural Effusion", "Pneumothorax", "Thoracic Drain", "Venous Catheter", "Gastrostomy Tube", "Tracheal Tube", "Misplacement of Devices"]
+    return table
