@@ -2,6 +2,10 @@
 ## Description
 The "Chest X-Ray Report Interpretation" app is an innovative application designed to assist radiologists and healthcare professionals in analyzing chest X-ray reports. Utilizing OpenAI's GPT-4 technology, the app interprets textual radiology reports, structuring the findings into a clear, tabulated format. It provides quick assessments of various conditions such as cardiac congestion, lung opacities, and the presence of medical devices, among others.
 
+## File Structure
+* main.py: The core functionality (OpenAI API (GPT-4) prompt) and the Streamlit interface
+* utils.py: Code for uploading and processing the user-inputted word, pdf, and txt files, as well as code for displaying the output in a human-readable format (e.g., in a table), as opposed to a Python dictionary.
+
 ## Instructions
 1. Upload a chest X-ray report as a .txt, .pdf, or .docx file. Or, enter/paste the report into the text box and press Ctrl+Enter.  
 2. Click the 'Submit' button.  
